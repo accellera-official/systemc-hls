@@ -9,6 +9,18 @@ Draft **SystemC High-level Synthesis Standard** and its reference library,
 > shapes the final standard: please read, try, and tell us what you think —
 > see [Get involved](#get-involved).
 
+## Download
+
+Release [v0.1.0-pub_rev][5]:
+
+| File | Content |
+|------|---------|
+| [`systemc-hls-0.1.0-pub_rev.tar.gz`][6] | systemc-hls library, examples and tests, and the markdown source of the draft standard |
+| [`systemc-hls-lib-0.1.0-pub_rev.tar.gz`][7] | systemc-hls library only |
+| [`SystemC_HLS_Standard_draft_1_6_pub_rev_2026-11-03.pdf`][8] | The draft SystemC High-level Synthesis Standard (PDF) |
+
+All releases: [Releases][9].
+
 ## What is here
 
 | Path | Content |
@@ -53,3 +65,8 @@ under the [Apache License, Version 2.0](LICENSE).
 [2]: https://accellera.org/activities/working-groups/systemc-synthesis
 [3]: https://github.com/accellera-official/systemc-hls/issues
 [4]: SystemC_HLS_Standard_draft_1_6_pub_rev_2026-11-03.pdf
+[5]: https://github.com/accellera-official/systemc-hls/releases/tag/v0.1.0-pub_rev
+[6]: https://github.com/accellera-official/systemc-hls/releases/download/v0.1.0-pub_rev/systemc-hls-0.1.0-pub_rev.tar.gz
+[7]: https://github.com/accellera-official/systemc-hls/releases/download/v0.1.0-pub_rev/systemc-hls-lib-0.1.0-pub_rev.tar.gz
+[8]: https://github.com/accellera-official/systemc-hls/releases/download/v0.1.0-pub_rev/SystemC_HLS_Standard_draft_1_6_pub_rev_2026-11-03.pdf
+[9]: https://github.com/accellera-official/systemc-hls/releases
