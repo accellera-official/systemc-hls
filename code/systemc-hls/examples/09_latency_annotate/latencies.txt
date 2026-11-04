@@ -1,0 +1,2 @@
+tb_top.dut_.bout0 3 3
+tb_top.dut_.bout1 3 3
