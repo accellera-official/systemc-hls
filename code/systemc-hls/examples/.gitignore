@@ -1,0 +1,23 @@
+# Build artifacts produced by `make`
+*/sim_sc
+*.o
+*.d
+
+# Verilator build directories (17_mixed_language)
+obj_dir/
+
+# Simulation output
+*.vcd
+
+# Logging-example artifacts (10_logging)
+example_*_data.txt
+example_*_names.json
+
+# Stray runtime outputs
+out.txt
+
+# Test-runner status file (regenerated each run)
+run_results.txt
+
+# IDE / tooling artifacts
+compile_commands.json

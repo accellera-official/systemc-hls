@@ -1,0 +1,6 @@
+{
+  "channels": {
+    "tb_top.dut_.block0_inst.dout": { "latency": 3, "capacity": 3 },
+    "tb_top.dut_.block1_inst.dout": { "latency": 3, "capacity": 3 }
+  }
+}
