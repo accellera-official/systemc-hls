@@ -4,14 +4,12 @@ style: chapter
 
 # 18. The SystemC HLS Library
 
-This section specifies the SystemC HLS communication library, a set of
-handshake-based ports and channels for throughput-accurate, synthesizable
-communication between processes and modules.
+This section specifies the SystemC HLS library. The library currently includes
+a communication library, a set of handshake-based ports and channels for
+throughput-accurate, synthesizable communication between processes and modules.
+Its future versions may include other SystemC and C++ components.
 
-<!-- REVIEW: The SystemC HLS library may include components other than communication channels,
-but the opening of this chapter implies that it is only about communication channels. -->
-
-The purpose of this library is to provide an API and the supporting simulation
+The purpose of the communication library is to provide an API and the supporting simulation
 infrastructure for modeling *<u>designs</u>* with concurrent I/O operations, such
 that the same concurrent transactions observed in the SystemC model are also
 observed in the generated RTL. A *transaction* is an observable event at a module

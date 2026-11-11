@@ -4,15 +4,9 @@ style: frontmatter
 
 # Participants
 
-At the time this Accellera standard was completed, the *SystemC Synthesis* Working Group had the following membership:
+<!-- To be populated for the final release:
 
-<!-- REVIEW:
-    1- Is this page based on the standard Accellera template used for other Accellera standards?
-    2- Do we refer to this document as "Standard" in the public review release?
-    3- Do we list all these members: https://workspace.accellera.org/wg/SWG/members
-    4- Who are SWG's secretary and technical editors?
-    5- There was a discussion in the Working Group regarding recognizing library contributions, how do we handle this?
--->
+At the time this Accellera standard was completed, the *SystemC Synthesis* Working Group had the following membership:
 
 | **AAA**, Chair
 | **BBB**, Vice Chair
@@ -31,11 +25,9 @@ The following members of the entity balloting committee voted on this standard. 
 | Company 2 | Company 5 | Company 8 |
 | Company 3 | Company 6 | Company 9 |
 {: .table-no-border .table-col-width-200 }
+-->
 
-
-**Participants**
-
-The following working group members drove the Draft 1.6 effort:
+The following working group members drove the Draft 2.0 effort:
 
 - Thomas Arndt
 - Stuart Swan

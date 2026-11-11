@@ -8,32 +8,19 @@ style: chapter no-header
 
 ## 1.1 Scope
 
-<!-- REVIEW:
-    1- As discussed in the SWG, this document proposes more than just Synthesizable Subsets of C++ and SystemC and it will be renamed, for example to SystemC High-Level Synthesis Standard
-    2- This chapter must be rewritten accordingly. It includes synthesizable subsets, communication primitives and is accompanied by a reference implementation.
--->
+This standard defines the following aspects of high-level synthesis of SystemC:
 
-The synthesizable subset defines the syntactic elements in ISO C++ that are appropriate for use in
-SystemC code intended for input to HLS tools.
+1. The minimum ISO C++17 \[1\] and IEEE Std 1666 \[2\] SystemC syntax subset to be supported by HLS tools
 
-<!--
-, as described in ISO/IEC 14882:2017 \[1\] and SystemC, as described in IEEE Std 1666-2023 \[2\], -->
+2. Standard input code structures to generate specific RTL structures
 
-The intent of this version of the standard document is to describe a minimum initial subset which
-can be supported by tools. It is not meant to restrict synthesis support for syntax beyond this
-subset.
+3. Expected output structures in the generated RTL code
 
-<!-- REVIEW:
-    3- Are we going to "cover" RTL?
--->
-The synthesizable subset of SystemC currently covers the register transfer level (RTL) and the
-behavioral level. More abstraction levels are also discussed in this document to provide context.
+4. A library of communication and synchronization components for HLS-based designs
+
+The intent of this version of the standard is to describe a minimum initial subset which can be supported by tools. It is not meant to restrict synthesis support for syntax beyond this subset, including additional vendor-specific design/library components.
 
 ## 1.2 Purpose
-
-<!-- REVIEW:
-    4- hardware designers -> hardware designers and architects (to emphasize abstraction)
--->
 
 In this standard document, the Synthesis Working Group (SWG) of the Accellera Systems Initiative has
 defined a subset of SystemC that is appropriate for synthesis. This is intended to be useful for
@@ -46,13 +33,9 @@ There are a wide variety of resources available to assist users in modeling with
 the IEEE Std 1666 Language Reference Manual (LRM), user guides of the HLS tools, and a number of
 books on SystemC modeling. This document is intended to fill a gap by defining a standard for
 creating synthesizable hardware description in SystemC, allowing a smooth transition between
-abstract modeling in SystemC and synthesizable description.
+abstract modeling in SystemC and synthesizable description. Familiarity with hardware design and HLS may also be helpful in understanding this standard.
 
 ## 1.3 Word usage
-
-<!-- REVIEW:
-    5- Occasional inconsistency in subsequent chapters of the document, e.g. *must* is used in chapters 7, 17 and 18 but is not defined here
--->
 
 The word *<u>shall</u>* indicates mandatory requirements strictly to be followed to conform to the
 standard and from which no deviation is permitted (*<u>shall</u>* equals *<u>is required to</u>*;
@@ -71,10 +54,6 @@ and TLM-2.0 class libraries, i.e., it uses classes, functions, or macros defined
 The word *<u>implementation</u>* means any specific implementation of the full SystemC, TLM-1,
 and TLM-2.0 class libraries, as defined in the SystemC LRM, of which only the public interface need
 be exposed to the application.
-
-<!-- REVIEW:
-    6- Check for consistency with the use of TLM elsewhere in the document and in the library.
--->
 
 The word *<u>design</u>* is used to mean a SystemC design written by an end user that describes
 hardware in conformance with this standard.
@@ -141,10 +120,6 @@ standard, are ***Supported***;
 while instances that violate these restrictions are either ***Ignored*** or ***Not Supported***.
 Unless explicitly categorized as ***Ignored***, the violating instances are ***Not Supported***.
 A construct that is ***Supported with Restrictions*** is also said to have ***Restricted Support***.
-
-<!-- REVIEW:
-    8- Mention synthesis directives, at least as categories here? Synthesis tool is defined in 1.3; chapter 19 is the placeholder for synthesis control.
--->
 
 ## 1.4 Conventions
 

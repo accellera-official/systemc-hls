@@ -15,8 +15,7 @@ Release [v0.1.0-pub_rev][5]:
 
 | File | Content |
 |------|---------|
-| [`systemc-hls-0.1.0-pub_rev.tar.gz`][6] | systemc-hls library, examples and tests, and the markdown source of the draft standard |
-| [`systemc-hls-lib-0.1.0-pub_rev.tar.gz`][7] | systemc-hls library only |
+| [`systemc-hls-lib-0.1.0-pub_rev.tar.gz`][7] | systemc-hls reference library, with examples and tests |
 | [`SystemC_HLS_Standard_draft_1_6_pub_rev_2026-11-03.pdf`][8] | The draft SystemC High-level Synthesis Standard (PDF) |
 
 All releases: [Releases][9].
@@ -56,6 +55,14 @@ large or small:
 - **Join the working group.** Accellera members can join the SWG and take
   part in shaping the standard; see [CONTRIBUTING.md](CONTRIBUTING.md#join-the-accellera-systemc-synthesis-working-group).
 
+## Acknowledgement
+
+Many of the key sc_hls::msg_lib library features such as throughput-accurate modeling, latency and capacity back annotation, random stall injection, and
+transaction recording and tracing are based on the Matchlib library developed by NVIDIA Research. The original DAC 2018 paper from NVIDIA Research
+that describes this work is freely available for download via the following link:
+
+https://research.nvidia.com/publication/2018-06_modular-digital-vlsi-flow-high-productivity-soc-design
+
 ## License
 
 This repository is owned by the Accellera Systems Initiative and licensed
@@ -66,7 +73,6 @@ under the [Apache License, Version 2.0](LICENSE).
 [3]: https://github.com/accellera-official/systemc-hls/issues
 [4]: SystemC_HLS_Standard_draft_1_6_pub_rev_2026-11-03.pdf
 [5]: https://github.com/accellera-official/systemc-hls/releases/tag/v0.1.0-pub_rev
-[6]: https://github.com/accellera-official/systemc-hls/releases/download/v0.1.0-pub_rev/systemc-hls-0.1.0-pub_rev.tar.gz
 [7]: https://github.com/accellera-official/systemc-hls/releases/download/v0.1.0-pub_rev/systemc-hls-lib-0.1.0-pub_rev.tar.gz
 [8]: https://github.com/accellera-official/systemc-hls/releases/download/v0.1.0-pub_rev/SystemC_HLS_Standard_draft_1_6_pub_rev_2026-11-03.pdf
 [9]: https://github.com/accellera-official/systemc-hls/releases

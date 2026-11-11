@@ -11,10 +11,10 @@ style: chapter
 This standard shall be used in conjunction with the following
 publication:
 
-- ISO/IEC 14882:2017 C++ Standard (C++17)
+- ISO/IEC 14882:2017 C++ Standard (C++17) \[1\]
     * available at https://webstore.ansi.org/standards/iso/isoiec148822017
 
-- IEEE Standard 1666-2023 for Standard SystemC Language, Reference Manual
+- IEEE Standard 1666-2023 for Standard SystemC Language, Reference Manual \[2\]
     * available at https://ieeexplore.ieee.org/servlet/opac?punumber=10246123
 
 The *ISO/IEC 14882:2017 C++ Standard* is hereinafter called *ISOC++* in this document.
@@ -36,23 +36,9 @@ C++ standard workgroup webpages documentating changes:
 The *IEEE Standard 1666-2023/Cor1-2025 for Standard SystemC Language, Reference Manual - Corrigendum 1*
 is available from https://ieeexplore.ieee.org/servlet/opac?punumber=10932725
 
-<!---
-Recent official C++ Standard documents are accessible from the ANSI webstore:
-- *ISO/IEC 14882:2020 C++ Standard* (C++20) document:
-  https://webstore.ansi.org/standards/iso/isoiec148822020
-- *ISO/IEC 14882:2024 C++ Standard* (C++24) document:
-  https://webstore.ansi.org/standards/iso/isoiec148822024
-
-Current C++ standard draft repository: https://github.com/cplusplus/draft
---->
-
 Informal useful references from the CPP Reference website:
 - C++14 https://en.cppreference.com/w/cpp/14
 - C++17 https://en.cppreference.com/w/cpp/17
-
-<!---
-- C++20 https://en.cppreference.com/w/cpp/20
--->
 
 
 ## 2.2 ISOC++ Implementation Compliance
@@ -84,10 +70,6 @@ One specific example is division by zero (0).
 *<u>Synthesis tools</u>* *<u>may</u>* assume that such a condition will not be present during
 simulation of the *<u>design</u>* and treat such a condition as a don’t care.
 
-<!-- REVIEW:
-    1- Besides division by zero, which undefined behaviors may synthesis tools assume are not present?
--->
-
 ### 2.2.3 Unspecified behavior
 
 ISOC++ 3.28
@@ -97,10 +79,6 @@ synthesis results and differences in results from different *<u>synthesis tools<
 
 An example is the order of evaluation of arguments to a function is not specified.
 In ISOC++, the implementation is not required to document which behavior occurs.
-
-<!-- REVIEW:
-    2- Why not require tools to document how unspecified behaviors are treated, for the sake of interoperability?
--->
 
 ## 2.3 SystemC LRM Compliance
 
@@ -112,7 +90,7 @@ with terms used in ISOC++.
 SystemC LRM 3.2.1
 
 In general, most of the implementation-defined items in the SystemC LRM do not affect synthesis.
-One item that does affect synthesis is the type for limited precision (SystemC LRM 7.2.2).
+One item that does affect synthesis is the type for limited precision (SystemC LRM 7).
 In that case, this standard only supports one implementation as specified in Section [8.3](08-types.md#83-systemc-datatypes) on SystemC datatypes.
 
 ### 2.3.2 Undefined
@@ -122,12 +100,10 @@ is used in the context of the behavior not being defined.
 
 ### 2.3.3 Error
 
-The word error is sometimes used interchangeably with the word undefined in the SystemC LRM.
-In many cases, an *<u>error</u>* refers to a compilation or simulation error.
+The word *<u>error</u>* is used in the SystemC LRM (3.3.6) to mean that the implementation is
+required to report SC_ERROR through the report handler, normally during elaboration or simulation.
+This differs from *<u>undefined</u>*, where an implementation may or may not issue an error or a
+warning.
 *<u>Synthesis tools</u>* assume that such conditions will not be present and treat such condition as
 a don’t care, unless the *<u>synthesis tools</u>* are able to prove that the error is present, in
 which case they *may* issue an error appropriately.
-
-<!-- REVIEW:
-    3- "simulation error" needs definition
--->
