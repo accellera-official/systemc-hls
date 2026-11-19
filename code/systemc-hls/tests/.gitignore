@@ -1,0 +1,8 @@
+# Test binaries produced by `make`
+*/test_*
+
+# Stray runtime output
+out.txt
+
+# Test-runner status file (regenerated each run)
+run_results.txt

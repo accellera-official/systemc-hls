@@ -1,0 +1,233 @@
+/*****************************************************************************
+
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
+
+/*
+sc_hls
+
+Main Header for the systemc-hls (sc_hls) Library — v0.1.0-pub_rev
+
+This is the single include for the sc_hls library — a communication library
+for SystemC HLS designs that provides throughput-accurate modeling using
+explicit handshake protocols.
+
+All message-passing types live in namespace sc_hls::msg_lib (ports, channels,
+interfaces, view tags, logging, annotation, random-stall). Library-wide
+utilities (e.g. add_clk) are exposed at the top-level sc_hls namespace.
+The sub-namespaces sc_hls::axi_lib and sc_hls::mem_lib are reserved for
+future use.
+
+Protocols
+=========
+
+Message passing with flow control (dat/vld/rdy)
+  Full flow control with back-pressure via the ready signal.
+  Both valid and ready must be asserted for a transfer to occur.
+  - msg_in<Message, ViewTag>   — input port
+  - msg_out<Message, ViewTag>  — output port
+  - msg_channel<Message, ViewTag> — channel
+
+Message passing without back-pressure (dat/vld)
+  Valid-only signaling without back-pressure.
+  The consumer must accept data every cycle when valid is asserted.
+  - msg_dv_in<Message, ViewTag>    — input port
+  - msg_dv_out<Message, ViewTag>   — output port
+  - msg_dv_channel<Message, ViewTag> — channel
+
+Sync (Rendezvous)
+  Strict rendezvous synchronization without data payload.
+  Both sides must rendezvous in the same clock cycle.
+  - sync_in<ViewTag> / sync_out<ViewTag> — ports
+  - sync_channel<ViewTag>      — channel
+
+FIFO
+  Buffered msg channel (dat/vld/rdy) with configurable depth.
+  - msg_fifo_module<Message, Depth, ViewTag> — buffered channel (raw enq/deq ports)
+  - msg_fifo_channel<Message, Depth, ViewTag> — FIFO wrapped as in/out channels
+
+View Selection (Tag-Based)
+===========================
+
+The library uses tag-based template parameters for view selection:
+
+  sim_view_tag      — Standard simulation view (cycle-accurate, signal-based)
+  default_view_tag  — Automatically selects sim_view_tag (or vendor tag in synthesis)
+
+Vendors can define their own view tags:
+  vendor_synth_tag  — Vendor-specific synthesis view
+
+Usage:
+
+  #include <systemc-hls>
+  using namespace sc_hls;
+  using namespace sc_hls::msg_lib;
+
+  // Default view (uses default_view_tag automatically):
+  msg_in<sc_uint<16>> in1;
+  msg_out<sc_uint<32>> out1;
+
+  // Explicit view selection:
+  msg_in<sc_uint<16>, sim_view_tag> in2;
+
+  // Parameterizable design:
+  template <typename ViewTag = default_view_tag>
+  SC_MODULE(dut) {
+      msg_in<sc_uint<16>, ViewTag> in1;
+      msg_out<sc_uint<32>, ViewTag> out1;
+      // ...
+  };
+
+File Organization
+=================
+
+  sc_hls_view_tag.h      — View tag definitions (sim_view_tag, default_view_tag)
+  sc_hls_interfaces.h       — msg_in_if / msg_out_if / back_annotation_if / trace_marker_if
+  internal/sc_hls_manager.h — clock_manager / channel_manager (pre/post scheduling)
+  sc_hls_msg.h              — msg_channel, msg_in, msg_out
+  sc_hls_msg_dv.h               — msg_dv_channel, msg_dv_in, msg_dv_out
+  sc_hls_sync.h             — sync_channel, sync_in, sync_out
+  sc_hls_fifo_module.h      — msg_fifo_module
+  sc_hls_fifo_channel.h     — msg_fifo_channel (msg_fifo_module wrapped as channels)
+  sc_hls_tracing.h          — trace_hierarchy(), sc_trace() overloads
+  sc_hls_logging.h          — channel_logs transaction logging
+
+Always-available features (dormant until configured at runtime):
+  sc_hls_rand_stall.h       — random stall injection  (activate: rand_stall::set())
+  sc_hls_annotate.h         — latency back-annotation (activate: set_latency_capacity())
+
+Clock Management
+================
+
+Clock registration is optional — the library auto-discovers sc_clock objects.
+Call explicitly only when auto-discovery is insufficient (e.g., multiple clocks):
+  sc_hls::msg_lib::add_clk(&clk);
+
+If a design's clock is not an sc_clock (e.g. a hand-toggled sc_signal<bool>),
+create a companion sc_clock with matching period/phase and alias the signal to
+it so the library can schedule pre/post against it:
+  sc_hls::add_clock_alias(companion_sc_clock, toggled_signal);
+
+Version: 0.1.0-pub_rev
+*/
+
+#pragma once
+
+// ============================================================================
+// Synthesis macro check
+// ============================================================================
+// Draft 1.6, 4.2 requires a synthesis tool to predefine both __SYNTHESIS__
+// and SC_SYNTHESIS. Defining only one indicates a non-conforming tool setup.
+// Define SC_HLS_SKIP_SYNTH_MACRO_CHECK to bypass this check.
+#ifndef SC_HLS_SKIP_SYNTH_MACRO_CHECK
+    #if defined(__SYNTHESIS__) != defined(SC_SYNTHESIS)
+        #error "Draft 1.6, 4.2 requires both __SYNTHESIS__ and SC_SYNTHESIS to be defined; define SC_HLS_SKIP_SYNTH_MACRO_CHECK to bypass"
+    #endif
+#endif
+
+// ============================================================================
+// View-partitioned includes
+// ============================================================================
+// The library has two views:
+//   - Simulation view: cycle-accurate, signal-based ports/channels plus the
+//     pre/post scheduling infrastructure (manager, logging, protocol engines,
+//     rand-stall, annotate, tracing). NONE of this is synthesizable.
+//   - Synthesis view (__SYNTHESIS__): vendors supply synthesizable partial
+//     specializations of the primary templates (see the vendor extension point
+//     below). Only the primary template *declarations*, the msg_in_if/msg_out_if
+//     contracts, and the synthesizable generic FIFO are needed here.
+//
+// The always-visible set below is safe for BOTH views. Everything simulation-
+// only is confined to the #ifndef __SYNTHESIS__ block so the HLS tool never
+// parses it.
+
+// -- Always visible (both views) --------------------------------------------
+#include "internal/sc_hls_synth_util.h" // SC_HLS_SYNTH_NAME, SC_HLS_LOGP  // IWYU pragma: keep
+#include "internal/sc_hls_ver.h"        // SYSTEMC_HLS_VERSION  // IWYU pragma: keep
+#include "sc_hls_view_tag.h"            // IWYU pragma: keep
+#include "sc_hls_interfaces.h"          // msg_in_if / msg_out_if (vendor inherits)  // IWYU pragma: keep
+#include "sc_hls_msg.h"                 // primary template declarations  // IWYU pragma: keep
+#include "sc_hls_msg_dv.h"              // primary template declarations  // IWYU pragma: keep
+#include "sc_hls_sync.h"                // primary template declarations  // IWYU pragma: keep
+#include "sc_hls_fifo_module.h"         // synthesizable generic FIFO  // IWYU pragma: keep
+#include "sc_hls_fifo_channel.h"        // synthesizable FIFO wrapper  // IWYU pragma: keep
+
+// -- Simulation-only: view bodies + all infrastructure ----------------------
+#ifndef __SYNTHESIS__
+    #include "sim_views/sc_hls_msg_sim_view.h"    // IWYU pragma: keep
+    #include "sim_views/sc_hls_msg_dv_sim_view.h" // IWYU pragma: keep
+    #include "sim_views/sc_hls_sync_sim_view.h"   // IWYU pragma: keep
+    #include "sc_hls_logging.h"                   // IWYU pragma: keep
+    #include "sc_hls_tracing.h"                   // IWYU pragma: keep
+    #include "internal/sc_hls_manager.h"          // IWYU pragma: keep
+    #include "internal/sc_hls_sim_helper.h"       // IWYU pragma: keep
+
+    // Optional features — always compiled in (simulation view).
+    // They remain dormant unless explicitly configured at runtime.
+    #include "sc_hls_rand_stall.h"                // IWYU pragma: keep
+    #include "sc_hls_annotate.h"                  // IWYU pragma: keep
+#endif
+
+// ============================================================================
+// Library-wide (top-level sc_hls) namespace
+// ============================================================================
+//
+// The message-passing library lives in sc_hls::msg_lib.  A small set of
+// library-wide utilities are re-exported at the top-level sc_hls scope so
+// they can be shared with future sub-libraries (sc_hls::axi_lib,
+// sc_hls::mem_lib).  add_clk() is one such shared utility.
+namespace sc_hls {
+
+    // add_clk / add_clock_alias live in the simulation-only manager and drive
+    // the pre/post scheduler, which has no meaning under synthesis. Re-export
+    // them only in the simulation view.
+#ifndef __SYNTHESIS__
+    // Shared clock-registration utility.
+    using msg_lib::add_clk;
+
+    // Alias a non-sc_clock clock (e.g. a hand-toggled sc_signal<bool>) to a
+    // companion sc_clock. See sc_hls_manager.h for the mechanism.
+    using msg_lib::add_clock_alias;
+#endif
+
+    // Reserved sub-libraries (to be populated later).
+    namespace axi_lib {}
+    namespace mem_lib {}
+
+} // namespace sc_hls
+
+// ============================================================
+// Vendor Extension Point
+// ============================================================
+// Vendors include their own implementation of the library classes
+//
+
+// Note: The following is not compatible with C++-11 and has been
+// removed. Vendor-specific implementations of the library classes
+// must be included explicitly along with this header file. This may
+// change in future versions of this library.
+
+// #ifdef __SYNTHESIS__
+//     #if defined(__has_include)
+//         #if __has_include("vendor/sc_hls_vendor.h")
+//             #include "vendor/sc_hls_vendor.h"
+//         #endif
+//     #endif
+// #endif
+
+// SC_HLS_LOGP (process-tagged stdout logging; no-op under synthesis) is defined
+// in internal/sc_hls_synth_util.h, included at the top of this header.

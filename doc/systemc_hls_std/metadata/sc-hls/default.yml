@@ -1,0 +1,55 @@
+title: "SystemC High-Level Synthesis Standard"
+subtitle: ""
+version: "Version 2.0 (Public Review)"
+creator: "Accellera Systems Initiative" # E.g. the author
+contributor: "" # E.g. other contributors
+subject: "" # E.g. BISAC terms (https://bisg.org/page/BISACEdition) or BIC (https://ns.editeur.org/bic_categories)
+description: "High-level synthesis (HLS) tools translate behavioral or partially timed SystemC models into register-transfer level (RTL) implementations. This standard defines the minimum ISO C++17 and IEEE Std 1666 SystemC syntax subset to be supported by HLS tools, the standard input code structures that generate specific RTL structures, and the expected output structures in the generated RTL. It also defines a library of communication and synchronization components for HLS-based designs. With this standard, hardware designers can create SystemC designs that are portable among all conforming HLS tools. The standard does not restrict a tool's support for syntax beyond the subset, including vendor-specific design and library components."
+keywords: "High-level Synthesis, Behavioral Synthesis, HLS, SystemC, Synthesizable Subset"
+publisher: "Accellera Systems Initiative" # E.g. the publisher, imprint or brand name
+publisher-url: ""
+date: "2026-11-19" # YYYY-MM-DD e.g. publication date
+modified: "2026-11-19" # YYYY-MM-DD e.g. date of last revision
+type: "Standard" # e.g. Standard, User Guide, Whitepaper
+identifier: "" # e.g. ISBN or UUID
+source: "" # e.g. parent ISBN or ISTC
+language: "en" # use ISO 639-1, 639-2, or 639-3 codes (in that order of preference)
+relation: "" # e.g. other edition ISBN
+coverage: "" # e.g. geographic place or chronological time span
+rightsholder: "Accellera" # who owns the copyright?
+rights: "All rights reserved." # e.g. a copyright statement
+image: "accellera_logo.svg"
+status: "Draft" # status, e.g., Draft, Final
+
+products: # Metadata for each product for this title (only use values that override parent metadata)
+  screen-pdf:
+    date: "2026-11-19" # YYYY-MM-DD e.g. publication date or last revision
+    format: "Digital download" # e.g. Paperback, Digital download, Digital online
+    identifier: "" # e.g. ISBN or UUID
+    image: "cover.jpg"
+    files:
+      - "0-0-titlepage"
+      - "0-1-abstract"
+      - "0-2-notice"
+      - "0-3-introduction"
+      - "0-4-participants"
+      - "0-5-contents"
+      - "01-overview"
+      - "02-normative"
+      - "03-definitions"
+      - "04-translation-units"
+      - "05-modules"
+      - "06-processes"
+      - "07-channels"
+      - "08-types"
+      - "09-declarations"
+      - "10-declarators"
+      - "11-expressions"
+      - "12-statements"
+      - "13-namespaces"
+      - "14-classes"
+      - "15-overloading"
+      - "16-templates"
+      - "17-libraries"
+      - "18-systemc-hls-library"
+      - "a-references"
